@@ -1,0 +1,132 @@
+A51 MACRO ASSEMBLER  LCD                                                                  04/16/2025 09:24:14 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\LCD.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE LCD.a51 SET(SMALL) DEBUG PRINT(.\Listings\LCD.lst) OBJECT(.\Objects\LCD
+                      .obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1     ORG 0000H
+                       2     
+                       3     ;-------------------------------
+                       4     ; PORT SETUP
+                       5     ;-------------------------------
+0000                   6     MAIN:
+0000 75A000            7         MOV P2, #00H    ; LCD Data Port as output
+0003 75B000            8         MOV P3, #00H    ; LCD Control Port as output
+                       9     
+0006 110C             10         ACALL LCD_INIT  ; Initialize LCD
+0008 1136             11         ACALL DISPLAY_MSG
+                      12     
+                      13         ; Infinite loop
+000A 80FE             14         SJMP $
+                      15     
+                      16     ;-------------------------------
+                      17     ; LCD INITIALIZATION
+                      18     ;-------------------------------
+000C                  19     LCD_INIT:
+000C 7438             20         MOV A, #38H     ; Function Set
+000E 111D             21         ACALL LCD_CMD
+0010 740C             22         MOV A, #0CH     ; Display ON, Cursor OFF
+0012 111D             23         ACALL LCD_CMD
+0014 7401             24         MOV A, #01H     ; Clear Display
+0016 111D             25         ACALL LCD_CMD
+0018 7406             26         MOV A, #06H     ; Entry Mode Set
+001A 111D             27         ACALL LCD_CMD
+001C 22               28         RET
+                      29     
+                      30     ;-------------------------------
+                      31     ; LCD COMMAND WRITE
+                      32     ;-------------------------------
+001D                  33     LCD_CMD:
+001D C2B0             34         CLR P3.0        ; RS = 0
+001F C2B1             35         CLR P3.1        ; RW = 0
+0021 112B             36         ACALL LCD_WRITE
+0023 22               37         RET
+                      38     
+                      39     ;-------------------------------
+                      40     ; LCD DATA WRITE
+                      41     ;-------------------------------
+0024                  42     LCD_DATA:
+0024 D2B0             43         SETB P3.0       ; RS = 1
+0026 C2B1             44         CLR P3.1        ; RW = 0
+0028 112B             45         ACALL LCD_WRITE
+002A 22               46         RET
+                      47     
+                      48     ;-------------------------------
+                      49     ; COMMON LCD WRITE PULSE
+                      50     ;-------------------------------
+002B                  51     LCD_WRITE:
+002B F5A0             52         MOV P2, A       ; Send A to LCD
+002D D2B2             53         SETB P3.2       ; EN = 1
+002F 1143             54         ACALL DELAY
+0031 C2B2             55         CLR P3.2        ; EN = 0
+0033 1143             56         ACALL DELAY
+0035 22               57         RET
+A51 MACRO ASSEMBLER  LCD                                                                  04/16/2025 09:24:14 PAGE     2
+
+                      58     
+                      59     ;-------------------------------
+                      60     ; DISPLAY STRING FROM MSG
+                      61     ;-------------------------------
+0036                  62     DISPLAY_MSG:
+0036 90004C           63         MOV DPTR, #MSG
+0039                  64     NEXT_CHAR:
+0039 E4               65         CLR A
+003A 93               66         MOVC A, @A+DPTR
+003B 6005             67         JZ DONE_DISPLAY
+003D 1124             68         ACALL LCD_DATA
+003F A3               69         INC DPTR
+0040 80F7             70         SJMP NEXT_CHAR
+                      71     
+0042                  72     DONE_DISPLAY:
+0042 22               73         RET
+                      74     
+                      75     ;-------------------------------
+                      76     ; SIMPLE DELAY
+                      77     ;-------------------------------
+0043                  78     DELAY:
+0043 7FC8             79         MOV R7, #200
+0045 7EFF             80     D1: MOV R6, #255
+0047 DEFE             81     D2: DJNZ R6, D2
+0049 DFFA             82         DJNZ R7, D1
+004B 22               83         RET
+                      84     
+                      85     ;-------------------------------
+                      86     ; MESSAGE STRING
+                      87     ;-------------------------------
+004C 48692053         88     MSG: DB "Hi Silicon", 0
+0050 696C6963                
+0054 6F6E00                  
+                      89     
+                      90     END
+A51 MACRO ASSEMBLER  LCD                                                                  04/16/2025 09:24:14 PAGE     3
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+D1 . . . . . . . .  C ADDR   0045H   A   
+D2 . . . . . . . .  C ADDR   0047H   A   
+DELAY. . . . . . .  C ADDR   0043H   A   
+DISPLAY_MSG. . . .  C ADDR   0036H   A   
+DONE_DISPLAY . . .  C ADDR   0042H   A   
+LCD_CMD. . . . . .  C ADDR   001DH   A   
+LCD_DATA . . . . .  C ADDR   0024H   A   
+LCD_INIT . . . . .  C ADDR   000CH   A   
+LCD_WRITE. . . . .  C ADDR   002BH   A   
+MAIN . . . . . . .  C ADDR   0000H   A   
+MSG. . . . . . . .  C ADDR   004CH   A   
+NEXT_CHAR. . . . .  C ADDR   0039H   A   
+P2 . . . . . . . .  D ADDR   00A0H   A   
+P3 . . . . . . . .  D ADDR   00B0H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)
