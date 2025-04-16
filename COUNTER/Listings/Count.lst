@@ -1,0 +1,47 @@
+A51 MACRO ASSEMBLER  COUNT                                                                04/16/2025 09:34:32 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\Count.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE Count.a51 SET(SMALL) DEBUG PRINT(.\Listings\Count.lst) OBJECT(.\Objects
+                      \Count.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1     ORG 0000H       ; Program starts at address 0
+0000 7400              2     MOV A, #00H     ; Initialize accumulator A with 0
+                       3     
+0002                   4     UP_COUNTER:
+0002 04                5         INC A        ; Increment A (A = A + 1)
+0003 1107              6         ACALL DELAY  ; Call delay subroutine
+0005 80FB              7         SJMP UP_COUNTER ; Infinite loop
+                       8     
+                       9     ; Simple Delay Routine (adjustable)
+0007                  10     DELAY:
+0007 79FF             11         MOV R1, #255
+0009                  12     WAIT1:
+0009 7AFF             13         MOV R2, #255
+000B                  14     WAIT2:
+000B DAFE             15         DJNZ R2, WAIT2
+000D D9FA             16         DJNZ R1, WAIT1
+000F 22               17         RET
+                      18     
+                      19     END             ; End of program
+A51 MACRO ASSEMBLER  COUNT                                                                04/16/2025 09:34:32 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+DELAY. . . . . . .  C ADDR   0007H   A   
+UP_COUNTER . . . .  C ADDR   0002H   A   
+WAIT1. . . . . . .  C ADDR   0009H   A   
+WAIT2. . . . . . .  C ADDR   000BH   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)
