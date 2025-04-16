@@ -1,0 +1,4 @@
+".\Objects\STARTUP.obj",
+".\Objects\Pushbutton.obj" 
+TO ".\Objects\pushbutton" 
+PRINT(".\Listings\pushbutton.m51") RAMSIZE(256) 
