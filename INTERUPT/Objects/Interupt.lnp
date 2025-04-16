@@ -1,0 +1,4 @@
+".\Objects\STARTUP.obj",
+".\Objects\interupt.obj" 
+TO ".\Objects\Interupt" 
+PRINT(".\Listings\Interupt.m51") RAMSIZE(256) 

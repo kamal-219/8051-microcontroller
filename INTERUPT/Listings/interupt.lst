@@ -1,0 +1,48 @@
+A51 MACRO ASSEMBLER  INTERUPT                                                             04/16/2025 09:42:31 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\interupt.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE interupt.a51 SET(SMALL) DEBUG PRINT(.\Listings\interupt.lst) OBJECT(.\O
+                      bjects\interupt.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1     ORG 0000H         ; Start of program memory
+                       2     
+0000                   3     START:
+0000 7400              4         MOV A, #00H    ; Initialize accumulator A with 0
+                       5     
+0002                   6     LOOP:
+0002 F590              7         MOV P1, A      ; Send current value of A to Port 1
+0004 1109              8         ACALL DELAY    ; Wait some time to see the output
+0006 04                9         INC A          ; Increment counter (A = A + 1)
+0007 80F9             10         SJMP LOOP      ; Repeat forever
+0009                  11     DELAY:
+0009 7964             12         MOV R1, #100
+000B 7AFA             13     D1: MOV R2, #250
+000D DAFE             14     D2: DJNZ R2, D2
+000F D9FA             15         DJNZ R1, D1
+0011 22               16         RET
+                      17     
+                      18     END
+A51 MACRO ASSEMBLER  INTERUPT                                                             04/16/2025 09:42:31 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+D1 . . . . . . . .  C ADDR   000BH   A   
+D2 . . . . . . . .  C ADDR   000DH   A   
+DELAY. . . . . . .  C ADDR   0009H   A   
+LOOP . . . . . . .  C ADDR   0002H   A   
+P1 . . . . . . . .  D ADDR   0090H   A   
+START. . . . . . .  C ADDR   0000H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)
