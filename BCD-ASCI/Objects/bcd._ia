@@ -1,0 +1,1 @@
+"bcd.a51" SET (SMALL) DEBUG PRINT(.\Listings\bcd.lst) OBJECT(.\Objects\bcd.obj) EP

@@ -1,0 +1,50 @@
+A51 MACRO ASSEMBLER  BCD                                                                  04/17/2025 06:14:58 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\bcd.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE bcd.a51 SET(SMALL) DEBUG PRINT(.\Listings\bcd.lst) OBJECT(.\Objects\bcd
+                      .obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1     ORG 0000H
+                       2     
+0000                   3     HIGH_BYTE:
+0000 7445              4     MOV A, #45H         
+0002 54F0              5     ANL A, #0F0H        
+0004 C4                6     SWAP A              
+0005 2430              7     ADD A, #30H         
+0007 FD                8     MOV R5, A
+0008 8D90              9     MOV P1, R5          
+                      10     
+000A                  11     LOW_BYTE:
+000A 7445             12     MOV A, #45H
+000C 540F             13     ANL A, #0FH         
+000E 2430             14     ADD A, #30H         
+0010 FE               15     MOV R6, A
+0011 8EA0             16     MOV P2, R6          
+                      17     
+0013                  18     HERE:
+0013 80FE             19     SJMP HERE           
+                      20     
+                      21     END
+A51 MACRO ASSEMBLER  BCD                                                                  04/17/2025 06:14:58 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+HERE . . . . . . .  C ADDR   0013H   A   
+HIGH_BYTE. . . . .  C ADDR   0000H   A   
+LOW_BYTE . . . . .  C ADDR   000AH   A   
+P1 . . . . . . . .  D ADDR   0090H   A   
+P2 . . . . . . . .  D ADDR   00A0H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)
