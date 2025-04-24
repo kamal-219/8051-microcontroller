@@ -1,0 +1,138 @@
+A51 MACRO ASSEMBLER  LCD1                                                                 04/23/2025 16:29:25 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+NO OBJECT MODULE REQUESTED
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE LCD1.a51 SET(SMALL) DEBUG PRINT(.\Listings\LCD1.lst) OBJECT(.\Objects\L
+                      CD1.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     ; Alternate LCD Scroll Left Code - 8051 Assembly
+                       2     
+0000                   3     ORG 0000H
+                       4     
+                       5     ; Pin definitions
+  00B0                 6     RS  EQU P3.0
+  00B1                 7     RW  EQU P3.1
+  00B2                 8     EN  EQU P3.2
+                       9     
+                      10     ; Delay routine
+0000                  11     DELAY:
+0000 7D64             12         MOV R5, #100
+0002                  13     DLY_LOOP:
+0002 7EFF             14         MOV R6, #255
+0004                  15     DLY_INNER:
+0004 DEFE             16         DJNZ R6, DLY_INNER
+0006 DDFA             17         DJNZ R5, DLY_LOOP
+0008 22               18         RET
+                      19     
+                      20     ; Enable pulse
+0009                  21     ENABLE_PULSE:
+0009 D2B2             22         SETB EN
+000B 1100             23         ACALL DELAY
+000D C2B2             24         CLR EN
+000F 22               25         RET
+                      26     
+                      27     ; Send command to LCD
+0010                  28     LCD_COMMAND:
+0010 C2B0             29         CLR RS
+0012 C2B1             30         CLR RW
+0014 1109             31         ACALL ENABLE_PULSE
+0016 22               32         RET
+                      33     
+                      34     ; Send data to LCD
+0017                  35     LCD_WRITE:
+0017 D2B0             36         SETB RS
+0019 C2B1             37         CLR RW
+001B 1109             38         ACALL ENABLE_PULSE
+001D 22               39         RET
+                      40     
+                      41     ; LCD Initialization
+001E                  42     LCD_INIT:
+001E 7438             43         MOV A, #38H
+0020 F590             44         MOV P1, A
+0022 1110             45         ACALL LCD_COMMAND
+                      46     
+0024 740C             47         MOV A, #0CH
+0026 F590             48         MOV P1, A
+0028 1110             49         ACALL LCD_COMMAND
+                      50     
+002A 7401             51         MOV A, #01H
+002C F590             52         MOV P1, A
+002E 1110             53         ACALL LCD_COMMAND
+                      54     
+0030 7406             55         MOV A, #06H
+0032 F590             56         MOV P1, A
+0034 1110             57         ACALL LCD_COMMAND
+A51 MACRO ASSEMBLER  LCD1                                                                 04/23/2025 16:29:25 PAGE     2
+
+                      58     
+0036 22               59         RET
+                      60     
+                      61     ; Print a string
+0037                  62     LCD_PRINT:
+0037 900053           63         MOV DPTR, #MESSAGE
+003A                  64     NEXT_CHAR:
+003A E4               65         CLR A
+003B                  66         MOV A, @DPTR
+*** ____________________________________^
+*** ERROR #A40 IN 66 (LCD1.a51, LINE 66): INVALID REGISTER
+003B 6007             67         JZ END_PRINT
+003D F590             68         MOV P1, A
+003F 1117             69         ACALL LCD_WRITE
+0041 A3               70         INC DPTR
+0042 80F6             71         SJMP NEXT_CHAR
+0044                  72     END_PRINT:
+0044 22               73         RET
+                      74     
+                      75     ; Main program
+0045                  76     MAIN:
+0045 111E             77         ACALL LCD_INIT
+0047 1137             78         ACALL LCD_PRINT
+                      79     
+0049                  80     SCROLL_LEFT:
+0049 7418             81         MOV A, #18H
+004B F590             82         MOV P1, A
+004D 1110             83         ACALL LCD_COMMAND
+004F 1100             84         ACALL DELAY
+0051 80F6             85         SJMP SCROLL_LEFT
+                      86     
+                      87     ; Message to display
+0053 48492053         88     MESSAGE: DB "HI SILICON", 0
+0057 494C4943                
+005B 4F4E00                  
+                      89     
+                      90     END
+A51 MACRO ASSEMBLER  LCD1                                                                 04/23/2025 16:29:25 PAGE     3
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+DELAY. . . . . . .  C ADDR   0000H   A   
+DLY_INNER. . . . .  C ADDR   0004H   A   
+DLY_LOOP . . . . .  C ADDR   0002H   A   
+EN . . . . . . . .  B ADDR   00B0H.2 A   
+ENABLE_PULSE . . .  C ADDR   0009H   A   
+END_PRINT. . . . .  C ADDR   0044H   A   
+LCD_COMMAND. . . .  C ADDR   0010H   A   
+LCD_INIT . . . . .  C ADDR   001EH   A   
+LCD_PRINT. . . . .  C ADDR   0037H   A   
+LCD_WRITE. . . . .  C ADDR   0017H   A   
+MAIN . . . . . . .  C ADDR   0045H   A   
+MESSAGE. . . . . .  C ADDR   0053H   A   
+NEXT_CHAR. . . . .  C ADDR   003AH   A   
+P1 . . . . . . . .  D ADDR   0090H   A   
+P3 . . . . . . . .  D ADDR   00B0H   A   
+RS . . . . . . . .  B ADDR   00B0H.0 A   
+RW . . . . . . . .  B ADDR   00B0H.1 A   
+SCROLL_LEFT. . . .  C ADDR   0049H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 1 ERROR(S)

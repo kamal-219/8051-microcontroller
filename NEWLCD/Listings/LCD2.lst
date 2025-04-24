@@ -1,0 +1,122 @@
+A51 MACRO ASSEMBLER  LCD2                                                                 04/23/2025 16:39:50 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\LCD2.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE LCD2.a51 SET(SMALL) DEBUG PRINT(.\Listings\LCD2.lst) OBJECT(.\Objects\L
+                      CD2.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1     ORG 0000H
+                       2     
+                       3     ; Data Port and Control Port Setup
+0000 75A000            4     MOV P2, #00H      ; Data port (connected to LCD data lines)
+0003 75B000            5     MOV P3, #00H      ; Control port: P3.0 = RS, P3.1 = RW, P3.2 = EN
+                       6     
+0006                   7     MAIN:
+0006 1115              8         ACALL INIT_LCD
+0008 90005C            9         MOV DPTR, #MSG
+000B 1148             10         ACALL DISPLAY_TEXT
+                      11     
+000D                  12     LOOP_SCROLL:
+000D 1152             13         ACALL DELAY
+000F 7418             14         MOV A, #18H       ; Command: Shift display left
+0011 112A             15         ACALL SEND_CMD
+0013 80F8             16         SJMP LOOP_SCROLL
+                      17     
+                      18     ; LCD Initialization
+0015                  19     INIT_LCD:
+0015 7438             20         MOV A, #38H       ; Function set: 8-bit, 2-line, 5x7
+0017 112A             21         ACALL SEND_CMD
+0019 740C             22         MOV A, #0CH       ; Display ON, Cursor OFF
+001B 112A             23         ACALL SEND_CMD
+001D 7401             24         MOV A, #01H       ; Clear display
+001F 112A             25         ACALL SEND_CMD
+0021 7406             26         MOV A, #06H       ; Entry mode: increment cursor
+0023 112A             27         ACALL SEND_CMD
+0025 7480             28         MOV A, #80H       ; Set cursor to 1st line
+0027 112A             29         ACALL SEND_CMD
+0029 22               30         RET
+                      31     
+                      32     ; Send Command to LCD
+002A                  33     SEND_CMD:
+002A F5A0             34         MOV P2, A
+002C C2B0             35         CLR P3.0          ; RS = 0
+002E C2B1             36         CLR P3.1          ; RW = 0
+0030 D2B2             37         SETB P3.2         ; EN = 1
+0032 1152             38         ACALL DELAY
+0034 C2B2             39         CLR P3.2          ; EN = 0
+0036 1152             40         ACALL DELAY
+0038 22               41         RET
+                      42     
+                      43     ; Send Data to LCD
+0039                  44     SEND_DATA:
+0039 F5A0             45         MOV P2, A
+003B D2B0             46         SETB P3.0         ; RS = 1
+003D C2B1             47         CLR P3.1          ; RW = 0
+003F D2B2             48         SETB P3.2         ; EN = 1
+0041 1152             49         ACALL DELAY
+0043 C2B2             50         CLR P3.2          ; EN = 0
+0045 1152             51         ACALL DELAY
+0047 22               52         RET
+                      53     
+                      54     ; Display message from ROM
+0048                  55     DISPLAY_TEXT:
+0048                  56     NEXT_CHAR:
+0048 E4               57         CLR A
+A51 MACRO ASSEMBLER  LCD2                                                                 04/23/2025 16:39:50 PAGE     2
+
+0049 93               58         MOVC A, @A+DPTR
+004A 6005             59         JZ END_DISPLAY
+004C 1139             60         ACALL SEND_DATA
+004E A3               61         INC DPTR
+004F 80F7             62         SJMP NEXT_CHAR
+0051                  63     END_DISPLAY:
+0051 22               64         RET
+                      65     
+                      66     ; Delay Subroutine
+0052                  67     DELAY:
+0052 7B32             68         MOV R3, #50
+0054                  69     DELAY1:
+0054 7CFF             70         MOV R4, #255
+0056                  71     DELAY2:
+0056 00               72         NOP
+0057 DCFD             73         DJNZ R4, DELAY2
+0059 DBF9             74         DJNZ R3, DELAY1
+005B 22               75         RET
+                      76     
+                      77     ; Message to be displayed
+005C 48492053         78     MSG: DB "HI SILICIC", 0
+0060 494C4943                
+0064 494300                  
+                      79     
+                      80     END
+A51 MACRO ASSEMBLER  LCD2                                                                 04/23/2025 16:39:50 PAGE     3
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+DELAY. . . . . . .  C ADDR   0052H   A   
+DELAY1 . . . . . .  C ADDR   0054H   A   
+DELAY2 . . . . . .  C ADDR   0056H   A   
+DISPLAY_TEXT . . .  C ADDR   0048H   A   
+END_DISPLAY. . . .  C ADDR   0051H   A   
+INIT_LCD . . . . .  C ADDR   0015H   A   
+LOOP_SCROLL. . . .  C ADDR   000DH   A   
+MAIN . . . . . . .  C ADDR   0006H   A   
+MSG. . . . . . . .  C ADDR   005CH   A   
+NEXT_CHAR. . . . .  C ADDR   0048H   A   
+P2 . . . . . . . .  D ADDR   00A0H   A   
+P3 . . . . . . . .  D ADDR   00B0H   A   
+SEND_CMD . . . . .  C ADDR   002AH   A   
+SEND_DATA. . . . .  C ADDR   0039H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

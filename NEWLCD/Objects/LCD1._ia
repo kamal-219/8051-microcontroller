@@ -1,0 +1,1 @@
+"LCD1.a51" SET (SMALL) DEBUG PRINT(.\Listings\LCD1.lst) OBJECT(.\Objects\LCD1.obj) EP
